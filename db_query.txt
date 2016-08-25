@@ -1,0 +1,47 @@
+CREATE TABLE BALANCES (
+EntityID int not null,
+balanceDate date,
+balance double
+);
+
+INSERT INTO BALANCES VALUES (1,'2010/05/01',100.0);
+INSERT INTO BALANCES VALUES (1,'2010/04/01',50.0);
+INSERT INTO BALANCES VALUES (1,'2010/03/01',75.0);
+INSERT INTO BALANCES VALUES (1,'2010/02/01',85.0);
+INSERT INTO BALANCES VALUES (2,'2010/05/01',110.0);
+
+
+CREATE TABLE Status (
+EntityID int not null,
+StatusDate date,
+Status varchar(10)
+);
+
+INSERT INTO STATUS VALUES (1,'2010/05/29','A');
+INSERT INTO STATUS VALUES (1,'2010/04/16','B');
+INSERT INTO STATUS VALUES (1,'2010/04/02','C');
+INSERT INTO STATUS VALUES (1,'2010/02/26','D');
+INSERT INTO STATUS VALUES (2,'2010/05/01','B');
+
+CREATE TABLE Entity (
+EntityID int not null,
+entityName varchar(10)
+);
+
+INSERT INTO Entity VALUES (1,'ABCD');
+INSERT INTO Entity VALUES (2,'XYZ');
+
+
+Qn 1) Select c.EntityName, a.BalanceDate as 'Date', a.Balance, (Select b.status from Status b where b.StatusDate <= a.BalanceDate limit 1) as Status
+from Balances a,  Entity c  
+where a.EntityID = c.EntityID
+order by EntityName desc, BalanceDate desc;
+
+
+Qn 2)Ans:
+
+Select c.EntityName, b.status, b.statusDate, avg(a.Balance) 
+from Balances a, Status b, Entity c  
+where a.EntityID = b.EntityID 
+and a.EntityID = c.EntityID
+group by c.EntityName;
